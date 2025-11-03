@@ -127,35 +127,43 @@ ll power(ll A, ll B)
  * 1 2 3 4 5 
  * */
 
-
-int f(int i, vector<int> &arr, int k, vector<int> &dp) {
-    int n = arr.size();
-    if(i == n) return 0;
-    if(dp[i] != -1) return dp[i];
-
-    int maxi = INT_MIN;
-    int maxAns = INT_MIN;
-    for(int indx = i; indx < min(n, i+k); indx++) {
-        maxi = max(maxi, arr[indx]);
-        int sum = (indx-i+1)*maxi + f(indx+1, arr, k, dp);
-        maxAns = max(maxAns, sum);
+bool isPalindrome(int i, int j, const string &s) {
+    while (i < j) {
+        if (s[i] != s[j]) return false;
+        i++;
+        j--;
     }
-    return dp[i] = maxAns;
+    return true;
 }
-int maxSumAfterPartitioning(vector<int>& arr, int k) {
-    int n = arr.size();
-    vector<int> dp(n, -1);
-    return f(0, arr, k, dp);
+
+int f(int i, int j, string s, vector<vector<int>> &dp) {
+    if(i == j) return 0;
+    if(dp[i][j] != -1) return dp[i][j];
+    if(isPalindrome(i, j, s)) return 0;
+
+    int minCuts = INT_MAX;
+    for(int k = i; k < j; k++) {
+        int cost = 1 + f(i, k, s, dp) + f(k+1, j, s, dp);
+        minCuts = min(minCuts, cost);
+    }
+
+    return dp[i][j] = minCuts;
+}
+int minCut(string s) {
+    int n = s.size();
+    vector<vector<int>> dp(n, vector<int>(n, -1));
+    return f(0, n-1, s, dp);
 }
 void solve() {
-    int n, k;
-    cin >> n >> k;
-    vector<int> v(n);
-    for(auto &it: v) {
-        cin >> it;
-    }
+    int n;
+    cin >> n;
+    string s;
+    cin >> s;
+    // for(auto &it: v) {
+    //     cin >> it;
+    // }
 
-    int ans = maxSumAfterPartitioning(v, k);
+    int ans = minCut(s);
     cout<<ans<<endl;
 }
 

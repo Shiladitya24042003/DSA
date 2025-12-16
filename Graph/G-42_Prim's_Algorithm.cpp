@@ -1,9 +1,4 @@
-#include<bits/stdc++.h>
-using namespace std;
-
 class Solution {
-    int spanningTree(int n, vector<vector<int>> edges) {
-        class Solution {
   public:
     int spanningTree(int n, vector<vector<int>>& edges) {
         vector<vector<int>> adj[n];
@@ -37,8 +32,5 @@ class Solution {
             }
         }
         return sum;
-    }
-};
-
     }
 };
